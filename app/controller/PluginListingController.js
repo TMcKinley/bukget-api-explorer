@@ -2,7 +2,8 @@ Ext.define('Bukget.controller.PluginListingController', {
     extend	: 'Ext.app.Controller',
     
     stores	: [
-        'FieldList'
+        'FieldList',
+        'SortDirection'
     ],
     views	: [
 	    'plugin.listing.Layout',
@@ -19,6 +20,10 @@ Ext.define('Bukget.controller.PluginListingController', {
     	selector: 'viewport plugin_listing_form button[name="searchButton"]'
     },
     {
+        ref     : 'sortFieldSet',
+        selector: 'viewport plugin_listing_form fieldset[name="sorting"]'
+    },
+    {
     	ref		: 'pluginListingForm',
     	selector: 'viewport plugin_listing_form'
     },
@@ -30,10 +35,14 @@ Ext.define('Bukget.controller.PluginListingController', {
     init	: function() {
         this.control({
             'viewport plugin_listing_form button[name="clearButton"]': {
-                click	: this.onClearButtonClick
+                click	        : this.onClearButtonClick
             },
             'viewport plugin_listing_form button[name="searchButton"]': {
-                click	: this.onSearchButtonClick
+                click	        : this.onSearchButtonClick
+            },
+            'viewport plugin_listing_form fieldset[name="sorting"] sortcontainer': {
+                addcontainer    : this.onSortContainerAddClick,
+                deletecontainer : this.onSortContainerDeleteClick
             }
         });
     },
@@ -148,6 +157,16 @@ Ext.define('Bukget.controller.PluginListingController', {
     	proxy.url = newUrl;
     	store.load();
     	*/
+    },
+
+    onSortContainerAddClick : function(sortContainer) {
+        var sortFS = this.getSortFieldSet();
+        sortFS.add({xtype: 'sortcontainer'});
+    },
+
+    onSortContainerDeleteClick : function(sortContainer) {
+        var sortFS = this.getSortFieldSet();
+        sortFS.remove(sortContainer);
     }
     
 });

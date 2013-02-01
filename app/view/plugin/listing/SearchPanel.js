@@ -10,18 +10,25 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
 	    'Ext.form.field.Checkbox',
 	    'Ext.form.field.ComboBox',
 	    'Ext.form.FieldSet',
-	    'Ext.form.field.Display'
+	    'Ext.form.field.Display',
+        'Bukget.ux.form.SortContainer'
 	],
     
     bodyStyle	: {
     	background	: '#D9E8FB',
     	padding		: '10px'
     },
+    collapseDirection: 'left',
+    titleCollapse: true,
+    collapsed	: false,
+    collapsible	: true,
+    animCollapse: false,
     layout		: 'anchor',
+    title       : 'Plugin Listing Configuration Options',
     items		: [{
         xtype			: 'radiogroup',
         name			: 'returned_fields_group',
-        fieldLabel		: 'Fields can either be excluded or included from the resultset',
+        fieldLabel		: 'Fields to excluded or included from the resultset',
         labelAlign		: 'top',
         columns			: 2,
         anchor			: '100%',
@@ -75,20 +82,11 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
         ]
     },
     {
-    	xtype				: 'combobox',
-    	fieldLabel			: 'test',
-    	queryMode			: 'local',
-    	valueField			: 'db_name',
-    	displayField		: 'display_name',
-    	store				: 'FieldList',
-    	anchor				: '90%'
-    },
-    {
     	xtype				: 'fieldset',
     	name				: 'pagination',
-    	title				: 'Use Pagination',
-    	checkboxToggle		: true,
-        collapsed			: true,
+    	title				: 'Pagination',
+        collapsed			: false,
+        collapsible         : true,
         layout				: 'anchor',
         items				: [{
         	xtype				: 'numberfield',
@@ -99,8 +97,8 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
 	    	maxValue			: 9999,
 	    	maxLength			: 4,
 	    	enforceMaxLength	: true,
-	    	labelAlign			: 'top',
-	    	anchor				: '90%'
+            labelWidth          : 300,
+	    	anchor				: '95%'
         },
         {
         	xtype				: 'numberfield',
@@ -111,8 +109,8 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
         	maxValue			: 9999,
         	maxLength			: 4,
         	enforceMaxLength	: true,
-        	labelAlign			: 'top',
-        	anchor				: '90%',
+            labelWidth          : 300,
+        	anchor				: '95%',
             style				: {
                 marginTop			: '10px'
             }
@@ -121,117 +119,12 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
     {
     	xtype			: 'fieldset',
     	name			: 'sorting',
-    	title			: 'Use Sorting',
-    	checkboxToggle	: true,
-        collapsed		: true,
+    	title			: 'Sorting',
+        collapsed		: false,
+        collapsible     : true,
         layout			: 'anchor',
-        items			: [{
-        	xtype			: 'container',
-            layout			: 'hbox',
-        	items			: [{
-        		xtype			: 'checkbox',
-        		name			: 'enable_plugin_sort',
-        		flex			: 1
-        	},
-        	{
-            	xtype				: 'combobox',
-            	fieldLabel			: '',
-            	hideEmptyLabel		: true,
-            	queryMode			: 'local',
-            	valueField			: 'db_name',
-            	displayField		: 'display_name',
-            	store				: 'FieldList',
-        		flex				: 12
-        	},
-        	{
-        		xtype			: 'combobox',
-        		name			: 'plugin_sort_order',
-                valueField		: 'db_field',
-                displayField	: 'display_field',
-                value			: 'ascending',
-                flex			: 3,
-                store			: {
-                    fields			: [ 'db_field', 'display_field' ],
-                    data			: [
-                        {dbfield: 'ascending', shownfield: 'Ascending'},
-                        {dbfield: 'descending', shownfield: 'Descending'}
-                    ]
-                }
-        	}]
-        },
-        {
-        	xtype			: 'container',
-            layout			: {
-            	type			: 'hbox',
-            	defaultMargins	: {
-            		top		: 5,
-            		right	: 0,
-            		bottom	: 0,
-            		left	: 0
-            	}
-            },
-        	items			: [{
-        		xtype			: 'checkbox',
-        		name			: 'enable_slug_sort',
-        		flex			: 1
-        	},
-        	{
-        		xtype			: 'displayfield',
-        		value			: 'Slug',
-        		flex			: 3
-        	},
-        	{
-        		xtype			: 'combobox',
-        		name			: 'slug_sort_order',
-                valueField		: 'dbfield',
-                displayField	: 'shownfield',
-                value			: 'ascending',
-                flex			: 3,
-                store			: {
-                    fields			: [ 'dbfield', 'shownfield' ],
-                    data			: [
-                        {dbfield: 'ascending', shownfield: 'Ascending'},
-                        {dbfield: 'descending', shownfield: 'Descending'}
-                    ]
-                }
-        	}]
-        },
-        {
-        	xtype			: 'container',
-            layout			: {
-            	type			: 'hbox',
-            	defaultMargins	: {
-            		top		: 5,
-            		right	: 0,
-            		bottom	: 0,
-            		left	: 0
-            	}
-            },
-        	items			: [{
-        		xtype			: 'checkbox',
-        		name			: 'enable_description_sort',
-        		flex			: 1
-        	},
-        	{
-        		xtype			: 'displayfield',
-        		value			: 'Description',
-        		flex			: 3
-        	},
-        	{
-        		xtype			: 'combobox',
-        		name			: 'description_sort_order',
-                valueField		: 'dbfield',
-                displayField	: 'shownfield',
-                value			: 'ascending',
-                flex			: 3,
-                store			: {
-                    fields			: [ 'dbfield', 'shownfield' ],
-                    data			: [
-                        {dbfield: 'ascending', shownfield: 'Ascending'},
-                        {dbfield: 'descending', shownfield: 'Descending'}
-                    ]
-                }
-        	}]
+        items           : [{
+            xtype           : 'sortcontainer'
         }]
     },
     {
