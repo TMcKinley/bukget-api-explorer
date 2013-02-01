@@ -247,13 +247,13 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
     		text	: 'Clear',
     		name	: 'clearButton',
     		margin	: '0 5 0 0',
-    		icon	: '/images/icons/cross.png'
+    		icon	: 'images/icons/cross.png'
     	},
     	{
     		xtype	: 'button',
     		text	: 'Search',
     		name	: 'searchButton',
-    		icon	: '/images/icons/magnifier.png'
+    		icon	: 'images/icons/magnifier.png'
     	}]
     },
     {
