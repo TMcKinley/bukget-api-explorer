@@ -9,8 +9,9 @@ Ext.application({
 		'Ext.ux'			: 'http://cdn.sencha.com/ext-4.1.1a-gpl/examples/ux'
 	},
 	controllers			: [
+	    'TrendController',
 	    'GenerationController',
-	    'PluginListingController'
+	    'PluginListingController',
 	],
 	init				: function() {
 		var test = "";

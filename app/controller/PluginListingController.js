@@ -2,8 +2,7 @@ Ext.define('Bukget.controller.PluginListingController', {
     extend	: 'Ext.app.Controller',
     
     stores	: [
-        'FieldList',
-        'SortDirection'
+        'FieldList'
     ],
     views	: [
 	    'plugin.listing.Layout',
@@ -12,20 +11,12 @@ Ext.define('Bukget.controller.PluginListingController', {
 	],
 	
     refs	: [{
-    	ref		: 'resetBtn',
-    	selector: 'viewport plugin_listing_form button[name="resetButton"]'
+    	ref		: 'clearBtn',
+    	selector: 'viewport plugin_listing_form button[name="clearButton"]'
     },
     {
     	ref		: 'searchBtn',
     	selector: 'viewport plugin_listing_form button[name="searchButton"]'
-    },
-    {
-        ref     : 'pageFieldSet',
-        selector: 'viewport plugin_listing_form fieldset[name="pagination"]'
-    },
-    {
-        ref     : 'sortFieldSet',
-        selector: 'viewport plugin_listing_form fieldset[name="sorting"]'
     },
     {
     	ref		: 'pluginListingForm',
@@ -38,20 +29,16 @@ Ext.define('Bukget.controller.PluginListingController', {
 	
     init	: function() {
         this.control({
-            'viewport plugin_listing_form button[name="resetButton"]': {
-                click	        : this.onResetButtonClick
+            'viewport plugin_listing_form button[name="clearButton"]': {
+                click	: this.onClearButtonClick
             },
             'viewport plugin_listing_form button[name="searchButton"]': {
-                click	        : this.onSearchButtonClick
-            },
-            'viewport plugin_listing_form fieldset[name="sorting"] sortcontainer': {
-                addcontainer    : this.onSortContainerAddClick,
-                deletecontainer : this.onSortContainerDeleteClick
+                click	: this.onSearchButtonClick
             }
         });
     },
     
-    onResetButtonClick	: function(button, event) {
+    onClearButtonClick	: function(button, event) {
     	var infoGrid = this.getPluginListingGrid();
     	infoGrid.getStore().removeAll();
     	
@@ -114,39 +101,16 @@ Ext.define('Bukget.controller.PluginListingController', {
     onSearchButtonClick	: function(button, event) {
     	var newUrl = 'http://api.bukget.org/3/plugins/';
     	var modifier = '';
-        var fields = [];
     	var form = this.getPluginListingForm();
-        var sortFieldSet = this.getSortFieldSet();
-        var pageFieldSet = this.getPageFieldSet();
-
-        /**
-         * Inclusive/Exclusive Toggle
-         * @type {*}
-         */
     	var radiogroup = form.down('radiogroup[name="returned_fields_group"]');
     	var radio = radiogroup.down('radio[checked=true]');
     	if (radio && radio.inputValue == 'exclusive') {
     		modifier = '-';
     	}
-
-        /**
-         * Fields to Include/Exclude
-         * @type {*}
-         */
-        var checkgroup = form.down('checkboxgroup[name="returned_fields"]');
-        var checkValue = checkgroup.getValue();
-        for (dbValue in checkValue) {
-            Ext.Array.push(fields, dbValue);
-        }
-        modifier += fields.join(',');
-        if (!Ext.isEmpty(modifier)) {
-            newUrl = Ext.String.urlAppend(newUrl, 'fields=' + modifier);
-        }
-
-
-        /**
-         * Error Checking
-         */
+    	
+    	var multiselect = form.down('multiselect[name="returned_fields"]');
+    	var fields = multiselect.getValue();
+    	
     	if (!radio && fields.length > 0) {
     		Ext.Msg.alert('Error', 'You must select either inclusive or exclusive when picking specific fields.');
     		return;
@@ -155,54 +119,21 @@ Ext.define('Bukget.controller.PluginListingController', {
     		Ext.Msg.alert('Error', 'You must select specific fields to include or exclude.');
     		return;
     	}
+    	
+    	modifier += fields.join(',');
+    	if (!Ext.isEmpty(modifier)) {
+    		newUrl += '?fields=' + modifier;
+    	}
+    	
+    	var pagefieldset = form.down('fieldset[name="pagination"]');
+    	if (!pagefieldset.collapsed) {
+    		var startfield = pagefieldset.down('numberfield[name="start_size"]');
+    	}
+    	
+    	var qqq = '';
 
 
-        /**
-         * Pagination Fields
-         * @type {*}
-         */
-    	var startfield = pageFieldSet.down('numberfield[name="start_size"]');
-        if (!Ext.isEmpty(startfield.getValue())) {
-            newUrl = Ext.String.urlAppend(newUrl, 'start=' + startfield.getValue());
-        }
-
-        var limitfield = pageFieldSet.down('numberfield[name="limit_size"]');
-        if (!Ext.isEmpty(limitfield.getValue())) {
-            newUrl = Ext.String.urlAppend(newUrl, 'size=' + limitfield.getValue());
-        }
-
-
-        /**
-         * Sorting Fields
-         * @type {*}
-         */
-        var sortFields = [];
-        var sortContainers = sortFieldSet.query('sortcontainer');
-        for (var i = 0; i < sortContainers.length; i++) {
-            var sortContainer = sortContainers[i];
-            var fieldCombo = sortContainer.down('combobox[name="fieldcombobox"]');
-            var fieldValue = fieldCombo.getValue();
-            if (Ext.isEmpty(fieldValue)) {
-                continue;
-            }
-
-            var sortModifier = '';
-            var sortCombo = sortContainer.down('combobox[name="sortcombobox"]');
-            var sortValue = sortCombo.getValue();
-            if (!Ext.isEmpty(sortValue) && sortValue === 'descending') {
-                sortModifier = '-';
-            }
-
-            Ext.Array.push(sortFields, sortModifier + fieldValue);
-        }
-        if (sortFields.length > 0) {
-            newUrl = Ext.String.urlAppend(newUrl, 'sort=' + sortFields.join(','));
-        }
-
-        /**
-         * Generated URL Display
-         * @type {*}
-         */
+    	
     	var urlfield = form.down('component[name="generated_url_value"]');
     	urlfield.update({
     		target: '#',
@@ -217,16 +148,6 @@ Ext.define('Bukget.controller.PluginListingController', {
     	proxy.url = newUrl;
     	store.load();
     	*/
-    },
-
-    onSortContainerAddClick : function(sortContainer) {
-        var sortFS = this.getSortFieldSet();
-        sortFS.add({xtype: 'sortcontainer'});
-    },
-
-    onSortContainerDeleteClick : function(sortContainer) {
-        var sortFS = this.getSortFieldSet();
-        sortFS.remove(sortContainer);
     }
     
 });

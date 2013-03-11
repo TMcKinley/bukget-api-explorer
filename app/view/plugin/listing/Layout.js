@@ -7,17 +7,22 @@ Ext.define("Bukget.view.plugin.listing.Layout", {
     
 	title		: 'Plugin Listing',
 	layout		: {
-		type			: 'hbox',
-        align	        : 'stretch'
+		type			: 'border',
+		regionWeights	: {
+			west	: 20,
+			north	: 10,
+			south	: -10,
+			east	: -20
+		}
 	},
     items		: [{
     	xtype		: 'plugin_listing_form',
     	region		: 'west',
-    	flex		: 4
+    	flex		: 2
     },
     {
     	xtype		: 'plugin_listing_grid',
     	region		: 'center',
-    	flex		: 4
+    	flex		: 3
     }]
 });

@@ -43,6 +43,9 @@ Ext.define('Bukget.view.Viewport', {
         {
         	xtype		: 'panel',
         	title		: 'Plugin Searching'
+        },
+        {
+        	xtype		: 'trendinfo'
         }]
     }
 });
