@@ -10,7 +10,8 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
 	    'Ext.form.field.Checkbox',
 	    'Ext.form.field.ComboBox',
 	    'Ext.form.FieldSet',
-	    'Ext.form.field.Display'
+	    'Ext.form.field.Display',
+        'Bukget.ux.form.SortContainer'
 	],
     
     bodyStyle	: {
@@ -39,18 +40,18 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
         vertical	: true,
         anchor		: '100%',
         items		: [
-            { boxLabel: 'Slug', 								name: 'rb', inputValue: 'inclusive' },
-            { boxLabel: 'Plugin Name', 							name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Server', 								name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Categories', 							name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Authors', 								name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Logo', 								name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Logo Full', 							name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Webpage', 								name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Dbo_page', 							name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Description', 							name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions', 							name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.version',	 					name: 'rb', inputValue: 'exclusive' },
+            { boxLabel: 'Slug', 								name: 'rb', inputValue: 'slug' },
+            { boxLabel: 'Plugin Name', 							name: 'rb', inputValue: 'plugin_name' },
+            { boxLabel: 'Server', 								name: 'rb', inputValue: 'server' },
+            { boxLabel: 'Categories', 							name: 'rb', inputValue: 'categories' },
+            { boxLabel: 'Authors', 								name: 'rb', inputValue: 'authors' },
+            { boxLabel: 'Logo', 								name: 'rb', inputValue: 'logo' },
+            { boxLabel: 'Logo Full', 							name: 'rb', inputValue: 'logo_full' },
+            { boxLabel: 'Webpage', 								name: 'rb', inputValue: 'webpage' },
+            { boxLabel: 'Dbo_page', 							name: 'rb', inputValue: 'dbo_page' },
+            { boxLabel: 'Description', 							name: 'rb', inputValue: 'description' },
+            { boxLabel: 'Versions', 							name: 'rb', inputValue: 'versions' },
+            { boxLabel: 'Versions.version',	 					name: 'rb', inputValue: 'versions.version' },
             { boxLabel: 'Versions.md5', 						name: 'rb', inputValue: 'exclusive' },
             { boxLabel: 'Versions.filename', 					name: 'rb', inputValue: 'exclusive' },
             { boxLabel: 'Versions.link', 						name: 'rb', inputValue: 'exclusive' },
@@ -76,12 +77,18 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
     },
     {
     	xtype				: 'combobox',
-    	fieldLabel			: 'test',
-    	queryMode			: 'local',
-    	valueField			: 'db_name',
-    	displayField		: 'display_name',
-    	store				: 'FieldList',
-    	anchor				: '90%'
+    	fieldLabel			: 'Category Filter',
+    	queryMode			: 'remote',
+    	valueField			: 'name',
+    	displayField		: 'name',
+        editable            : false,
+    	store				: 'Category',
+    	anchor				: '90%',
+        tpl                 : Ext.create('Ext.XTemplate',
+            '<tpl for=".">',
+                '<div class="x-boundlist-item">{name} ({count})</div>',
+            '</tpl>'
+        )
     },
     {
     	xtype				: 'fieldset',
@@ -125,6 +132,10 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
     	checkboxToggle	: true,
         collapsed		: true,
         layout			: 'anchor',
+        items           : [{
+            xtype           : 'sortcontainer'
+        }]
+        /*
         items			: [{
         	xtype			: 'container',
             layout			: 'hbox',
@@ -135,6 +146,7 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
         	},
         	{
             	xtype				: 'combobox',
+                name                : 'plugin_field',
             	fieldLabel			: '',
             	hideEmptyLabel		: true,
             	queryMode			: 'local',
@@ -158,81 +170,8 @@ Ext.define("Bukget.view.plugin.listing.SearchPanel", {
                     ]
                 }
         	}]
-        },
-        {
-        	xtype			: 'container',
-            layout			: {
-            	type			: 'hbox',
-            	defaultMargins	: {
-            		top		: 5,
-            		right	: 0,
-            		bottom	: 0,
-            		left	: 0
-            	}
-            },
-        	items			: [{
-        		xtype			: 'checkbox',
-        		name			: 'enable_slug_sort',
-        		flex			: 1
-        	},
-        	{
-        		xtype			: 'displayfield',
-        		value			: 'Slug',
-        		flex			: 3
-        	},
-        	{
-        		xtype			: 'combobox',
-        		name			: 'slug_sort_order',
-                valueField		: 'dbfield',
-                displayField	: 'shownfield',
-                value			: 'ascending',
-                flex			: 3,
-                store			: {
-                    fields			: [ 'dbfield', 'shownfield' ],
-                    data			: [
-                        {dbfield: 'ascending', shownfield: 'Ascending'},
-                        {dbfield: 'descending', shownfield: 'Descending'}
-                    ]
-                }
-        	}]
-        },
-        {
-        	xtype			: 'container',
-            layout			: {
-            	type			: 'hbox',
-            	defaultMargins	: {
-            		top		: 5,
-            		right	: 0,
-            		bottom	: 0,
-            		left	: 0
-            	}
-            },
-        	items			: [{
-        		xtype			: 'checkbox',
-        		name			: 'enable_description_sort',
-        		flex			: 1
-        	},
-        	{
-        		xtype			: 'displayfield',
-        		value			: 'Description',
-        		flex			: 3
-        	},
-        	{
-        		xtype			: 'combobox',
-        		name			: 'description_sort_order',
-                valueField		: 'dbfield',
-                displayField	: 'shownfield',
-                value			: 'ascending',
-                flex			: 3,
-                store			: {
-                    fields			: [ 'dbfield', 'shownfield' ],
-                    data			: [
-                        {dbfield: 'ascending', shownfield: 'Ascending'},
-                        {dbfield: 'descending', shownfield: 'Descending'}
-                    ]
-                }
-        	}]
         }]
+        */
     },
     {
     	xtype				: 'container',

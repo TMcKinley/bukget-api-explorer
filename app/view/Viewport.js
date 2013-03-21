@@ -25,20 +25,10 @@ Ext.define('Bukget.view.Viewport', {
         	title		: 'Plugin Download'
         },
         {
-        	xtype		: 'panel',
-        	title		: 'Category Listing'
+        	xtype		: 'category_layout'
         },
         {
-        	xtype		: 'panel',
-        	title		: 'Category Plugin Listing'
-        },
-        {
-        	xtype		: 'panel',
-        	title		: 'Author Listing'
-        },
-        {
-        	xtype		: 'panel',
-        	title		: 'Author Plugin Listing'
+        	xtype		: 'author_layout'
         },
         {
         	xtype		: 'panel',

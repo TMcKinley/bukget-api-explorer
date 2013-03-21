@@ -14,6 +14,7 @@ Ext.define('Bukget.store.Category', {
         startParam	: undefined,
         pageParam	: undefined,
         type		: 'jsonp',
+        url 		: 'http://api.bukget.org/3/categories/',
         reader		: {
         	type		: 'json'
         }

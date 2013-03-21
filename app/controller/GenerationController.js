@@ -2,7 +2,6 @@ Ext.define('Bukget.controller.GenerationController', {
     extend	: 'Ext.app.Controller',
     
     stores	: [
-        'Category',
         'GenerationInfo'
     ],
     views	: [

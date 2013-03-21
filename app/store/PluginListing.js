@@ -8,10 +8,10 @@ Ext.define('Bukget.store.PluginListing', {
 	],
     
 	autoLoad	: false,
+    pageSize    : 100,
     proxy		: {
         noCache		: false,
-        limitParam	: undefined,
-        startParam	: undefined,
+        limitParam  : 'size',
         pageParam	: undefined,
         type		: 'jsonp',
         reader		: {

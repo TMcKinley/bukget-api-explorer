@@ -2,7 +2,8 @@ Ext.define('Bukget.controller.PluginListingController', {
     extend	: 'Ext.app.Controller',
     
     stores	: [
-        'FieldList'
+        'FieldList',
+        'SortDirection'
     ],
     views	: [
 	    'plugin.listing.Layout',
@@ -30,10 +31,14 @@ Ext.define('Bukget.controller.PluginListingController', {
     init	: function() {
         this.control({
             'viewport plugin_listing_form button[name="clearButton"]': {
-                click	: this.onClearButtonClick
+                click	        : this.onClearButtonClick
             },
             'viewport plugin_listing_form button[name="searchButton"]': {
-                click	: this.onSearchButtonClick
+                click	        : this.onSearchButtonClick
+            },
+            'viewport plugin_listing_form sortcontainer': {
+                addcontainer    : this.onAddSortContainerClick,
+                deletecontainer : this.onDeleteSortContainerClick
             }
         });
     },
@@ -107,18 +112,24 @@ Ext.define('Bukget.controller.PluginListingController', {
     	if (radio && radio.inputValue == 'exclusive') {
     		modifier = '-';
     	}
-    	
-    	var multiselect = form.down('multiselect[name="returned_fields"]');
-    	var fields = multiselect.getValue();
-    	
-    	if (!radio && fields.length > 0) {
+
+        var fields = [];
+    	var multiselect = form.down('checkboxgroup[name="returned_fields"]');
+    	var tempFields = multiselect.getValue().rb;
+    	if (!radio && tempFields.length > 0) {
     		Ext.Msg.alert('Error', 'You must select either inclusive or exclusive when picking specific fields.');
     		return;
     	}
-    	if (radio && fields.length <= 0) {
+    	if (radio && tempFields.length <= 0) {
     		Ext.Msg.alert('Error', 'You must select specific fields to include or exclude.');
     		return;
     	}
+        if (!Ext.isArray(tempFields)) {
+            fields.push(tempFields);
+        }
+        else {
+            fields = tempFields;
+        }
     	
     	modifier += fields.join(',');
     	if (!Ext.isEmpty(modifier)) {
@@ -129,8 +140,18 @@ Ext.define('Bukget.controller.PluginListingController', {
     	if (!pagefieldset.collapsed) {
     		var startfield = pagefieldset.down('numberfield[name="start_size"]');
     	}
-    	
-    	var qqq = '';
+
+        var sortString = "&sort=";
+        var sortFieldSet = form.down('fieldset[name="sorting"]');
+        if (!sortFieldSet.collapsed) {
+            var chk = sortFieldSet.down('checkboxfield');
+            if (chk.getValue()) {
+                var field = sortFieldSet.down('combobox[name="plugin_field"]');
+                sortString += field.getValue();
+            }
+        }
+
+        newUrl += sortString;
 
 
     	
@@ -148,6 +169,18 @@ Ext.define('Bukget.controller.PluginListingController', {
     	proxy.url = newUrl;
     	store.load();
     	*/
+    },
+
+    onAddSortContainerClick         : function(sortContainer, eventOptions) {
+        var form = this.getPluginListingForm();
+        var sortFS = form.down('fieldset[name="sorting"]');
+        sortFS.add({xtype: 'sortcontainer'});
+    },
+
+    onDeleteSortContainerClick         : function(sortContainer, eventOptions) {
+        var form = this.getPluginListingForm();
+        var sortFS = form.down('fieldset[name="sorting"]');
+        sortFS.remove(sortContainer);
     }
     
 });
