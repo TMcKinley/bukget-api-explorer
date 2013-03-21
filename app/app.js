@@ -6,7 +6,7 @@ Ext.application({
     name				: 'Bukget',
     autoCreateViewport	: true,
 	paths				: {
-		'Ext.ux'			: 'http://cdn.sencha.com/ext-4.1.1a-gpl/examples/ux'
+		'Ext.ux'			: 'http://cdn.sencha.com/ext/gpl/4.2.0/examples/ux'
 	},
 	controllers			: [
 	    'TrendController',
