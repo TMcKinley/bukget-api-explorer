@@ -11,7 +11,7 @@ Ext.define('Bukget.ux.form.SortContainer', {
     ],
 	
 	config			: {
-		height			: 40,
+		//height			: 40,
 		comboWidth		: 100,
 		comboStore		: '',
 		comboValue		: '',
@@ -107,7 +107,7 @@ Ext.define('Bukget.ux.form.SortContainer', {
     			defaultMargins	: {
     				top		: 0,
     				right	: 5,
-    				bottom	: 5,
+    				bottom	: 0,
     				left	: 5
     	    	}
     		},
@@ -128,5 +128,23 @@ Ext.define('Bukget.ux.form.SortContainer', {
     
     onBeforeContainerRemove		: function(sortContainer, targetComponent) {
 		this.fireEvent('deletecontainer', this);
+    },
+
+    getSearchFragment           : function() {
+        var modifier = (this.getSortCombo().getValue() == 'descending') ? '-' : '';
+        var query = this.getFieldCombo().getValue();
+        if (Ext.isEmpty(query)) {
+            return '';
+        }
+
+        return modifier + query;
+    },
+
+    getFieldCombo               : function() {
+        return this.down('combobox[name="fieldcombobox"]');
+    },
+
+    getSortCombo                : function() {
+        return this.down('combobox[name="sortcombobox"]');
     }
 });

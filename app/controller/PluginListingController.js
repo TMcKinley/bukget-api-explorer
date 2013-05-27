@@ -3,12 +3,13 @@ Ext.define('Bukget.controller.PluginListingController', {
     
     stores	: [
         'FieldList',
-        'SortDirection'
+        'SortDirection',
+        'PluginListing'
     ],
     views	: [
 	    'plugin.listing.Layout',
-	    'plugin.listing.InfoGridPanel',
-	    'plugin.listing.SearchPanel'
+	    'plugin.listing.PluginListingGrid',
+	    'plugin.listing.PluginListingForm'
 	],
 	
     refs	: [{
@@ -25,7 +26,7 @@ Ext.define('Bukget.controller.PluginListingController', {
     },
     {
     	ref		: 'pluginListingGrid',
-    	selector: 'viewport generation_info_grid'
+    	selector: 'viewport plugin_listing_grid'
     }],
 	
     init	: function() {
@@ -39,8 +40,32 @@ Ext.define('Bukget.controller.PluginListingController', {
             'viewport plugin_listing_form sortcontainer': {
                 addcontainer    : this.onAddSortContainerClick,
                 deletecontainer : this.onDeleteSortContainerClick
+            },
+            'viewport plugin_listing_form fieldset': {
+                beforecollapse  : this.onFieldsetBeforeCollapse,
+                beforeexpand    : this.onFieldsetBeforeExpand
             }
         });
+    },
+
+    onFieldsetBeforeCollapse    : function(fieldset) {
+        var fields = fieldset.query('checkboxfield');
+        for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            field.setValue(false);
+        }
+
+        return false;
+    },
+
+    onFieldsetBeforeExpand      : function(fieldset) {
+        var fields = fieldset.query('checkboxfield');
+        for (var i = 0; i < fields.length; i++) {
+            var field = fields[i];
+            field.setValue(true);
+        }
+
+        return false;
     },
     
     onClearButtonClick	: function(button, event) {
@@ -116,14 +141,15 @@ Ext.define('Bukget.controller.PluginListingController', {
         var fields = [];
     	var multiselect = form.down('checkboxgroup[name="returned_fields"]');
     	var tempFields = multiselect.getValue().rb;
-    	if (!radio && tempFields.length > 0) {
-    		Ext.Msg.alert('Error', 'You must select either inclusive or exclusive when picking specific fields.');
-    		return;
-    	}
-    	if (radio && tempFields.length <= 0) {
-    		Ext.Msg.alert('Error', 'You must select specific fields to include or exclude.');
-    		return;
-    	}
+        if (!radio) {
+            Ext.Msg.alert('Error', 'You must select either inclusive or exclusive when picking specific fields.');
+            return;
+        }
+        if (Ext.isEmpty(tempFields) || tempFields.length <= 0) {
+            Ext.Msg.alert('Error', 'You must select specific fields to include or exclude.');
+            return;
+        }
+
         if (!Ext.isArray(tempFields)) {
             fields.push(tempFields);
         }
@@ -137,24 +163,37 @@ Ext.define('Bukget.controller.PluginListingController', {
     	}
     	
     	var pagefieldset = form.down('fieldset[name="pagination"]');
-    	if (!pagefieldset.collapsed) {
-    		var startfield = pagefieldset.down('numberfield[name="start_size"]');
-    	}
+    	var startfield = pagefieldset.down('numberfield[name="start_size"]');
+        var startvalue = startfield.getValue();
 
+        var limitfield = pagefieldset.down('numberfield[name="limit_size"]');
+        var limitvalue = limitfield.getValue();
+
+        if (Ext.isNumeric(startvalue)) {
+            if (startvalue > 0 || (Ext.isNumeric(limitvalue) && limitvalue > 0)) {
+                newUrl += '&start=' + startvalue;
+            }
+        }
+        if (Ext.isNumeric(limitvalue) && limitvalue > 0) {
+            newUrl += '&size=' + limitvalue;
+        }
+
+        var sortFields = [];
         var sortString = "&sort=";
         var sortFieldSet = form.down('fieldset[name="sorting"]');
-        if (!sortFieldSet.collapsed) {
-            var chk = sortFieldSet.down('checkboxfield');
-            if (chk.getValue()) {
-                var field = sortFieldSet.down('combobox[name="plugin_field"]');
-                sortString += field.getValue();
+        var sortContainers = sortFieldSet.query('sortcontainer');
+
+        for (var i = 0; i < sortContainers.length; i++) {
+            var container = sortContainers[i];
+            var query = container.getSearchFragment();
+            if (!Ext.isEmpty(query)) {
+                sortFields.push(query);
             }
         }
 
+        sortString += sortFields.join(',');
         newUrl += sortString;
 
-
-    	
     	var urlfield = form.down('component[name="generated_url_value"]');
     	urlfield.update({
     		target: '#',
@@ -162,13 +201,18 @@ Ext.define('Bukget.controller.PluginListingController', {
     		href: newUrl
     	});
     	
-    	/*    	
-    	var grid = this.getGenerationInfoGrid();
+
+    	var grid = this.getPluginListingGrid();
     	var store = grid.getStore();
     	var proxy = store.getProxy();
     	proxy.url = newUrl;
-    	store.load();
-    	*/
+    	store.load({
+            scope       : this,
+            callback    : function(records, operation, success) {
+                var test = '';
+                var test2 = '';
+            }
+        });
     },
 
     onAddSortContainerClick         : function(sortContainer, eventOptions) {

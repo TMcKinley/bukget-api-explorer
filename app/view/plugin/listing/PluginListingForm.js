@@ -19,61 +19,129 @@ Ext.define("Bukget.view.plugin.listing.PluginListingForm", {
     	padding		: '10px'
     },
     layout		: 'anchor',
+    collapsible : true,
     items		: [{
         xtype			: 'radiogroup',
         name			: 'returned_fields_group',
         fieldLabel		: 'Fields can either be excluded or included from the resultset',
         labelAlign		: 'top',
+        labelStyle      : 'font-weight:bold;',
         columns			: 2,
         anchor			: '100%',
         items			: [
-            { boxLabel: 'Inclusive', name: 'rb', inputValue: 'inclusive' },
+            { boxLabel: 'Inclusive', name: 'rb', inputValue: 'inclusive', checked: true },
             { boxLabel: 'Exclusive', name: 'rb', inputValue: 'exclusive' }
         ]
     },
     {
-    	xtype		: 'checkboxgroup',
-    	name		: 'returned_fields',
-    	fieldLabel	: 'Fields to be returned or excluded',
-    	labelAlign	: 'top',
-        columns		: 3,
-        vertical	: true,
-        anchor		: '100%',
-        items		: [
-            { boxLabel: 'Slug', 								name: 'rb', inputValue: 'slug' },
-            { boxLabel: 'Plugin Name', 							name: 'rb', inputValue: 'plugin_name' },
-            { boxLabel: 'Server', 								name: 'rb', inputValue: 'server' },
-            { boxLabel: 'Categories', 							name: 'rb', inputValue: 'categories' },
-            { boxLabel: 'Authors', 								name: 'rb', inputValue: 'authors' },
-            { boxLabel: 'Logo', 								name: 'rb', inputValue: 'logo' },
-            { boxLabel: 'Logo Full', 							name: 'rb', inputValue: 'logo_full' },
-            { boxLabel: 'Webpage', 								name: 'rb', inputValue: 'webpage' },
-            { boxLabel: 'Dbo_page', 							name: 'rb', inputValue: 'dbo_page' },
-            { boxLabel: 'Description', 							name: 'rb', inputValue: 'description' },
-            { boxLabel: 'Versions', 							name: 'rb', inputValue: 'versions' },
-            { boxLabel: 'Versions.version',	 					name: 'rb', inputValue: 'versions.version' },
-            { boxLabel: 'Versions.md5', 						name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.filename', 					name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.link', 						name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.download', 					name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.type',	 					name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.status', 						name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.changelog', 					name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.game_versions', 				name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.date', 						name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.slug', 						name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.hard_dependencies', 			name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.soft_dependencies', 			name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.Permissions', 				name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.Permissions.role', 			name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.Permissions.default', 		name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.Commands', 					name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.Commands.usage', 				name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.Commands.alias', 				name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.Commands.command', 			name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.Commands.permission', 		name: 'rb', inputValue: 'exclusive' },
-            { boxLabel: 'Versions.Commands.permission_message', name: 'rb', inputValue: 'exclusive' }
-        ]
+        xtype           : 'displayfield',
+        fieldLabel      : 'Fields to be returned or excluded:',
+        anchor          : '100%',
+        labelWidth      : 300,
+        labelStyle      : 'font-weight:bold;'
+    },
+    {
+        xtype           : 'fieldset',
+        name            : 'main_fieldset',
+        title           : 'Main Fields',
+        checkboxToggle  : true,
+        items           : [{
+            xtype		    : 'checkboxgroup',
+            name		    : 'main_fields',
+            columns		    : 5,
+            vertical	    : true,
+            items		    : [
+                { boxLabel: 'Slug', 								name: 'rb', inputValue: 'slug', checked: true },
+                { boxLabel: 'Plugin Name', 							name: 'rb', inputValue: 'plugin_name', checked: true },
+                { boxLabel: 'Server', 								name: 'rb', inputValue: 'server', checked: true },
+                { boxLabel: 'Categories', 							name: 'rb', inputValue: 'categories', checked: true },
+                { boxLabel: 'Authors', 								name: 'rb', inputValue: 'authors', checked: true },
+                { boxLabel: 'Logo', 								name: 'rb', inputValue: 'logo', checked: true },
+                { boxLabel: 'Logo Full', 							name: 'rb', inputValue: 'logo_full', checked: true },
+                { boxLabel: 'Webpage', 								name: 'rb', inputValue: 'webpage', checked: true },
+                { boxLabel: 'Dbo_page', 							name: 'rb', inputValue: 'dbo_page', checked: true },
+                { boxLabel: 'Description', 							name: 'rb', inputValue: 'description', checked: true }
+            ]
+        }]
+    },
+    {
+        xtype           : 'fieldset',
+        name            : 'version_fieldset',
+        title           : 'Version Fields',
+        checkboxToggle  : true,
+        items           : [{
+            xtype		    : 'checkboxgroup',
+            name		    : 'version_fields',
+            columns		    : 5,
+            vertical	    : true,
+            items		    : [
+                { boxLabel: 'Version',	 					name: 'rb', inputValue: 'versions.version', checked: true },
+                { boxLabel: 'MD5', 		    				name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Filename', 					name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Link', 						name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Download', 					name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Type',	    					name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Status', 						name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Changelog', 					name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Date', 						name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Slug', 						name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Game Versions', 				name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Soft Dependencies',			name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Hard Dependencies',			name: 'rb', inputValue: 'exclusive', checked: true }
+            ]
+        }]
+    },
+    {
+        xtype           : 'fieldset',
+        name            : 'command_fieldset',
+        title           : 'Command Fields',
+        checkboxToggle  : true,
+        items           : [{
+            xtype		    : 'checkboxgroup',
+            name		    : 'command_fields',
+            columns		    : 5,
+            vertical	    : true,
+            items		    : [
+                { boxLabel: 'Usage', 				name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Alias', 				name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Command', 			    name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Permission', 		    name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Permission Message',   name: 'rb', inputValue: 'exclusive', checked: true }
+            ]
+        }]
+    },
+    {
+        xtype           : 'fieldset',
+        name            : 'permission_fieldset',
+        title           : 'Permisssion Fields',
+        checkboxToggle  : true,
+        items           : [{
+            xtype		    : 'checkboxgroup',
+            name		    : 'permission_fields',
+            columns		    : 5,
+            vertical	    : true,
+            items		    : [
+                { boxLabel: 'Role', 				name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Default', 				name: 'rb', inputValue: 'exclusive', checked: true }
+            ]
+        }]
+    },
+    {
+        xtype           : 'fieldset',
+        name            : 'popularity_fieldset',
+        title           : 'Popularity Fields',
+        checkboxToggle  : true,
+        items           : [{
+            xtype		    : 'checkboxgroup',
+            name		    : 'popularity_fields',
+            columns		    : 5,
+            vertical	    : true,
+            items		    : [
+                { boxLabel: 'Daily', 				name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Weekly', 				name: 'rb', inputValue: 'exclusive', checked: true },
+                { boxLabel: 'Monthly', 				name: 'rb', inputValue: 'exclusive', checked: true }
+            ]
+        }]
     },
 /*
     {
@@ -132,43 +200,6 @@ Ext.define("Bukget.view.plugin.listing.PluginListingForm", {
         items           : [{
             xtype           : 'sortcontainer'
         }]
-        /*
-        items			: [{
-        	xtype			: 'container',
-            layout			: 'hbox',
-        	items			: [{
-        		xtype			: 'checkbox',
-        		name			: 'enable_plugin_sort',
-        		flex			: 1
-        	},
-        	{
-            	xtype				: 'combobox',
-                name                : 'plugin_field',
-            	fieldLabel			: '',
-            	hideEmptyLabel		: true,
-            	queryMode			: 'local',
-            	valueField			: 'db_name',
-            	displayField		: 'display_name',
-            	store				: 'FieldList',
-        		flex				: 12
-        	},
-        	{
-        		xtype			: 'combobox',
-        		name			: 'plugin_sort_order',
-                valueField		: 'db_field',
-                displayField	: 'display_field',
-                value			: 'ascending',
-                flex			: 3,
-                store			: {
-                    fields			: [ 'db_field', 'display_field' ],
-                    data			: [
-                        {dbfield: 'ascending', shownfield: 'Ascending'},
-                        {dbfield: 'descending', shownfield: 'Descending'}
-                    ]
-                }
-        	}]
-        }]
-        */
     },
     {
     	xtype				: 'container',
