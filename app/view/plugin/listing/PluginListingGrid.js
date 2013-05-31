@@ -7,16 +7,43 @@ Ext.define("Bukget.view.plugin.listing.PluginListingGrid", {
     
 	store	: 'PluginListing',
     columns	: [{
-        text: 'Plugin Name',
-        dataIndex: 'plugin_name'
+        text        : 'Plugin Name',
+        dataIndex   : 'plugin_name'
     },
 	{
-        text: 'Slug',
-        dataIndex: 'slug'
+        text        : 'Slug',
+        dataIndex   : 'slug'
     },
 	{
-        text: 'Description',
-        dataIndex: 'description',
-        flex: 1
+        text        : 'Server',
+        dataIndex   : 'server'
+    },
+    {
+        text        : 'Logo',
+        dataIndex   : 'logo'
+    },
+    {
+        text        : 'Full Logo',
+        dataIndex   : 'logo_full'
+    },
+    {
+        text        : 'Webpage',
+        dataIndex   : 'webpage'
+    },
+    {
+        text        : 'DBO Page',
+        dataIndex   : 'dbo_page'
+    },
+    {
+        text        : 'Description',
+        dataIndex   : 'description'
+    },
+    {
+        text        : 'Authors',
+        dataIndex   : 'authors'
+    },
+    {
+        text        : 'Categories',
+        dataIndex   : 'categories'
     }]
 });

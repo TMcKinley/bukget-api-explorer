@@ -23,6 +23,6 @@ Ext.define("Bukget.view.plugin.listing.Layout", {
     {
     	xtype		: 'plugin_listing_grid',
     	region		: 'center',
-    	flex		: 3
+    	flex		: 5
     }]
 });

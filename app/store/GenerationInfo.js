@@ -10,8 +10,8 @@ Ext.define('Bukget.store.GenerationInfo', {
 	autoLoad	: false,
     proxy		: {
         noCache		: false,
-        limitParam	: undefined,
         startParam	: undefined,
+        limitParam	: undefined,
         pageParam	: undefined,
         type		: 'jsonp',
         reader		: {

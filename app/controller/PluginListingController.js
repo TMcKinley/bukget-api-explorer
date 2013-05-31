@@ -42,10 +42,21 @@ Ext.define('Bukget.controller.PluginListingController', {
                 deletecontainer : this.onDeleteSortContainerClick
             },
             'viewport plugin_listing_form fieldset': {
+                afterrender     : this.onFieldSetAfterRender,
                 beforecollapse  : this.onFieldsetBeforeCollapse,
                 beforeexpand    : this.onFieldsetBeforeExpand
             }
         });
+    },
+
+    onFieldSetAfterRender      : function(fieldset) {
+        if (fieldset.collapsible) {
+            //fieldset.expand();
+            //var field = fieldset.down('checkbox[name="' + fieldset.id + '-checkbox"]');
+            //if (!Ext.isEmpty(field)) {
+            //    field.setRawValue(false);
+            //}
+        }
     },
 
     onFieldsetBeforeCollapse    : function(fieldset) {
@@ -137,30 +148,19 @@ Ext.define('Bukget.controller.PluginListingController', {
     	if (radio && radio.inputValue == 'exclusive') {
     		modifier = '-';
     	}
-
-        var fields = [];
-    	var multiselect = form.down('checkboxgroup[name="returned_fields"]');
-    	var tempFields = multiselect.getValue().rb;
         if (!radio) {
             Ext.Msg.alert('Error', 'You must select either inclusive or exclusive when picking specific fields.');
             return;
         }
-        if (Ext.isEmpty(tempFields) || tempFields.length <= 0) {
-            Ext.Msg.alert('Error', 'You must select specific fields to include or exclude.');
-            return;
-        }
 
-        if (!Ext.isArray(tempFields)) {
-            fields.push(tempFields);
+        var fields = this.gatherSelectedCheckboxes();
+        if (!Ext.isEmpty(fields)) {
+            newUrl += '?fields=' + modifier + fields;
         }
-        else {
-            fields = tempFields;
-        }
-    	
-    	modifier += fields.join(',');
-    	if (!Ext.isEmpty(modifier)) {
-    		newUrl += '?fields=' + modifier;
-    	}
+        //if (Ext.isEmpty(fields) || fields.length <= 0) {
+        //    Ext.Msg.alert('Error', 'You must select specific fields to include or exclude.');
+        //    return;
+        //}
     	
     	var pagefieldset = form.down('fieldset[name="pagination"]');
     	var startfield = pagefieldset.down('numberfield[name="start_size"]');
@@ -213,6 +213,47 @@ Ext.define('Bukget.controller.PluginListingController', {
                 var test2 = '';
             }
         });
+    },
+
+    gatherSelectedCheckboxes        : function() {
+        var queryFragment = '',
+            form = this.getPluginListingForm(),
+            fields = [],
+            formFields,
+            tempFields;
+
+        formFields = form.down('checkboxgroup[name="main_fields"]');
+        tempFields = formFields.getValue().rb;
+        if (!Ext.isEmpty(tempFields)) {
+            Ext.Array.push(fields, tempFields);
+        }
+
+        formFields = form.down('checkboxgroup[name="version_fields"]');
+        tempFields = formFields.getValue().rb;
+        if (!Ext.isEmpty(tempFields)) {
+            Ext.Array.push(fields, tempFields);
+        }
+
+        formFields = form.down('checkboxgroup[name="command_fields"]');
+        tempFields = formFields.getValue().rb;
+        if (!Ext.isEmpty(tempFields)) {
+            Ext.Array.push(fields, tempFields);
+        }
+
+        formFields = form.down('checkboxgroup[name="permission_fields"]');
+        tempFields = formFields.getValue().rb;
+        if (!Ext.isEmpty(tempFields)) {
+            Ext.Array.push(fields, tempFields);
+        }
+
+        formFields = form.down('checkboxgroup[name="popularity_fields"]');
+        tempFields = formFields.getValue().rb;
+        if (!Ext.isEmpty(tempFields)) {
+            Ext.Array.push(fields, tempFields);
+        }
+
+        queryFragment += fields.join(',');
+        return queryFragment;
     },
 
     onAddSortContainerClick         : function(sortContainer, eventOptions) {

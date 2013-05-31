@@ -169,5 +169,20 @@ Ext.define('Bukget.store.FieldList', {
     	db_name: 'versions.commands.permission_message',
     	display_name: 'Versions.Commands.permission_message',
     	help_text: ''
+    },
+    {
+        db_name: 'popularity.daily',
+        display_name: 'Popularity.daily',
+        help_text: ''
+    },
+    {
+        db_name: 'popularity.weekly',
+        display_name: 'Popularity.weekly',
+        help_text: ''
+    },
+    {
+        db_name: 'popularity.monthly',
+        display_name: 'Populartiy.monthly',
+        help_text: ''
     }]
 });

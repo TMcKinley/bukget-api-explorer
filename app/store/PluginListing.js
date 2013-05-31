@@ -1,16 +1,16 @@
 Ext.define('Bukget.store.PluginListing', {
     extend		: 'Ext.data.Store',
-    model		: 'Bukget.model.PluginListing',
+    model		: 'Bukget.model.listing.BasePlugin',
     requires	: [
 	    'Ext.data.proxy.JsonP',
 	    'Ext.data.reader.Json',
-	    'Bukget.model.PluginListing'
+	    'Bukget.model.listing.BasePlugin'
 	],
     
 	autoLoad	: false,
-    pageSize    : 100,
     proxy		: {
         noCache		: false,
+        startParam	: 'start',
         limitParam  : 'size',
         pageParam	: undefined,
         type		: 'jsonp',

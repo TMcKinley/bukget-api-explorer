@@ -44,11 +44,13 @@ Ext.define("Bukget.view.plugin.listing.PluginListingForm", {
         xtype           : 'fieldset',
         name            : 'main_fieldset',
         title           : 'Main Fields',
+        collapsible     : true,
         checkboxToggle  : true,
+        collapsed       : false,
         items           : [{
             xtype		    : 'checkboxgroup',
             name		    : 'main_fields',
-            columns		    : 5,
+            columns		    : 4,
             vertical	    : true,
             items		    : [
                 { boxLabel: 'Slug', 								name: 'rb', inputValue: 'slug', checked: true },
@@ -68,26 +70,27 @@ Ext.define("Bukget.view.plugin.listing.PluginListingForm", {
         xtype           : 'fieldset',
         name            : 'version_fieldset',
         title           : 'Version Fields',
+        collapsible     : true,
         checkboxToggle  : true,
         items           : [{
             xtype		    : 'checkboxgroup',
             name		    : 'version_fields',
-            columns		    : 5,
+            columns		    : 4,
             vertical	    : true,
             items		    : [
                 { boxLabel: 'Version',	 					name: 'rb', inputValue: 'versions.version', checked: true },
-                { boxLabel: 'MD5', 		    				name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Filename', 					name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Link', 						name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Download', 					name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Type',	    					name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Status', 						name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Changelog', 					name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Date', 						name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Slug', 						name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Game Versions', 				name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Soft Dependencies',			name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Hard Dependencies',			name: 'rb', inputValue: 'exclusive', checked: true }
+                { boxLabel: 'Filename', 					name: 'rb', inputValue: 'versions.filename', checked: true },
+                { boxLabel: 'Link', 						name: 'rb', inputValue: 'versions.link', checked: true },
+                { boxLabel: 'Download', 					name: 'rb', inputValue: 'versions.download', checked: true },
+                { boxLabel: 'Type',	    					name: 'rb', inputValue: 'versions.type', checked: true },
+                { boxLabel: 'Status', 						name: 'rb', inputValue: 'versions.status', checked: true },
+                { boxLabel: 'Changelog', 					name: 'rb', inputValue: 'versions.changelog', checked: true },
+                { boxLabel: 'Date', 						name: 'rb', inputValue: 'versions.date', checked: true },
+                { boxLabel: 'Slug', 						name: 'rb', inputValue: 'versions.slug', checked: true },
+                { boxLabel: 'Game Versions', 				name: 'rb', inputValue: 'versions.game_versions', checked: true },
+                { boxLabel: 'Soft Dependencies',			name: 'rb', inputValue: 'versions.soft_dependencies', checked: true },
+                { boxLabel: 'Hard Dependencies',			name: 'rb', inputValue: 'versions.hard_dependencies', checked: true },
+                { boxLabel: 'MD5', 		    				name: 'rb', inputValue: 'versions.md5', checked: true }
             ]
         }]
     },
@@ -95,18 +98,19 @@ Ext.define("Bukget.view.plugin.listing.PluginListingForm", {
         xtype           : 'fieldset',
         name            : 'command_fieldset',
         title           : 'Command Fields',
+        collapsible     : true,
         checkboxToggle  : true,
         items           : [{
             xtype		    : 'checkboxgroup',
             name		    : 'command_fields',
-            columns		    : 5,
+            columns		    : 4,
             vertical	    : true,
             items		    : [
-                { boxLabel: 'Usage', 				name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Alias', 				name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Command', 			    name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Permission', 		    name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Permission Message',   name: 'rb', inputValue: 'exclusive', checked: true }
+                { boxLabel: 'Usage', 				name: 'rb', inputValue: 'versions.commands.usage', checked: true },
+                { boxLabel: 'Alias', 				name: 'rb', inputValue: 'versions.commands.alias', checked: true },
+                { boxLabel: 'Command', 			    name: 'rb', inputValue: 'versions.commands.command', checked: true },
+                { boxLabel: 'Permission', 		    name: 'rb', inputValue: 'versions.commands.permission', checked: true },
+                { boxLabel: 'Permission Message',   name: 'rb', inputValue: 'versions.commands.permission_message', checked: true }
             ]
         }]
     },
@@ -114,15 +118,16 @@ Ext.define("Bukget.view.plugin.listing.PluginListingForm", {
         xtype           : 'fieldset',
         name            : 'permission_fieldset',
         title           : 'Permisssion Fields',
+        collapsible     : true,
         checkboxToggle  : true,
         items           : [{
             xtype		    : 'checkboxgroup',
             name		    : 'permission_fields',
-            columns		    : 5,
+            columns		    : 4,
             vertical	    : true,
             items		    : [
-                { boxLabel: 'Role', 				name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Default', 				name: 'rb', inputValue: 'exclusive', checked: true }
+                { boxLabel: 'Role', 				name: 'rb', inputValue: 'versions.permissions.role', checked: true },
+                { boxLabel: 'Default', 				name: 'rb', inputValue: 'versions.permissions.default', checked: true }
             ]
         }]
     },
@@ -130,16 +135,17 @@ Ext.define("Bukget.view.plugin.listing.PluginListingForm", {
         xtype           : 'fieldset',
         name            : 'popularity_fieldset',
         title           : 'Popularity Fields',
+        collapsible     : true,
         checkboxToggle  : true,
         items           : [{
             xtype		    : 'checkboxgroup',
             name		    : 'popularity_fields',
-            columns		    : 5,
+            columns		    : 4,
             vertical	    : true,
             items		    : [
-                { boxLabel: 'Daily', 				name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Weekly', 				name: 'rb', inputValue: 'exclusive', checked: true },
-                { boxLabel: 'Monthly', 				name: 'rb', inputValue: 'exclusive', checked: true }
+                { boxLabel: 'Daily', 				name: 'rb', inputValue: 'popularity.daily', checked: true },
+                { boxLabel: 'Weekly', 				name: 'rb', inputValue: 'popularity.weekly', checked: true },
+                { boxLabel: 'Monthly', 				name: 'rb', inputValue: 'popularity.monthly', checked: true }
             ]
         }]
     },
@@ -178,18 +184,18 @@ Ext.define("Bukget.view.plugin.listing.PluginListingForm", {
             maxValue			: 9999,
             maxLength			: 4,
             enforceMaxLength	: true,
-            width               : 300,
+            width               : 250,
             labelAlign			: 'top'
         },
         {
             xtype				: 'numberfield',
             name				: 'limit_size',
-            fieldLabel			: 'Total number of records to return (Defaults to all)',
+            fieldLabel			: 'Total number of records to return',
             minValue			: 1,
             maxValue			: 9999,
             maxLength			: 4,
             enforceMaxLength	: true,
-            width               : 300,
+            width               : 225,
             labelAlign			: 'top'
         }]
     },
